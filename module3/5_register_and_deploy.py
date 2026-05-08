@@ -44,7 +44,7 @@ print(f"   Model Name: {MODEL_NAME}")
 print(f"   F1 Score: {f1_score:.4f}")
 
 # ============================================================================
-# Step 2: Register model in CML 
+# Step 2: Register model in CML
 # ============================================================================
 print("\n[2/6] Registering model in CML...")
 
@@ -70,7 +70,7 @@ try:
     )
     registered_model_id = registered_model_response.model_id
     model_version_id = registered_model_response.model_versions[0].model_version_id
-    
+
     print(f"✅ Model registered in CML:")
     print(f"   Registered Model ID: {registered_model_id}")
     print(f"   Model Version ID: {model_version_id}")
@@ -105,7 +105,7 @@ try:
         project_id=project_id
     )
     print(f"   ✅ Model endpoint created: {cml_model.id}")
-    
+
 except ApiException as e:
     if "already has a model with that name" in str(e.body):
         print(f"   ⚠️  Model endpoint already exists, reusing it...")
@@ -129,7 +129,7 @@ except ApiException as e:
 print("\n[5/6] Creating model build...")
 
 # Using the same standard runtime from your example
-runtime_id = "docker.repository.cloudera.com/cloudera/cdsw/ml-runtime-pbj-workbench-python3.10-standard:2025.09.1-b5"
+runtime_id = "docker.repository.cloudera.com/cloudera/cdsw/ml-runtime-pbj-workbench-python3.10-standard:2026.04.1-b7"
 
 create_build_request = cmlapi.CreateModelBuildRequest(
     registered_model_version_id=str(model_version_id),
@@ -145,7 +145,7 @@ try:
     )
     print(f"   ✅ Build created: {build.id}")
     print(f"   ⏳ Build is running (~5-10 minutes)")
-    
+
 except ApiException as e:
     print(f"   ❌ ERROR: {e.reason}")
     print(f"   Body: {e.body}")
@@ -172,7 +172,7 @@ for i in range(checks):
         )
         status = build_status.status
         print(f"   Check {i+1}/{checks}: Build status = {status}")
-        
+
         if status == "built":
             build_succeeded = True
             print(f"   ✅ Build completed successfully!")
@@ -185,7 +185,7 @@ for i in range(checks):
         else:
             print(f"   ⚠️  Unknown status: {status}")
             time.sleep(check_interval_seconds)
-            
+
     except Exception as e:
         print(f"   ⚠️  Error checking build status: {e}")
         time.sleep(check_interval_seconds)
@@ -210,7 +210,7 @@ else:
         )
         deployment_id = deployment.id
         print(f"   ✅ Deployment created: {deployment.id}")
-        
+
     except ApiException as e:
         print(f"   ❌ ERROR creating deployment: {e.body}")
         deployment_id = None
